@@ -3,8 +3,8 @@ deployment:
   replicaCount: 1
 
   image:
-    repository: arti-strata.freewheel.tv/fwa-docker/onestrata/certwatcher-python:20260917
-    tag: "24.08.26.7"
+    repository: arti-strata.freewheel.tv/fwa-docker/onestrata/certwatcher-python
+    tag: "20260917"
     pullPolicy: IfNotPresent
 
   serviceAccount:
