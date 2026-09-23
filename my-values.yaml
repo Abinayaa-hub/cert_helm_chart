@@ -1,0 +1,65 @@
+deployment:
+  namespace: monitoring
+  replicaCount: 1
+
+  image:
+    repository: <Placeholder Image Name>
+    tag: "24.08.26.7"
+    pullPolicy: IfNotPresent
+
+  serviceAccount:
+    name: certificate-event-publisher
+    automountServiceAccountToken: true
+
+  resources:
+    limits:
+      memory: "128Mi"
+      cpu: "500m"
+    requests:
+      memory: "64Mi"
+      cpu: "250m"
+
+  env:
+    CERTIFICATES:
+      - CERT_NAMESPACE: monitoring
+        CERT_NAME: saml-cert-1
+        CERT_SECRET_NAME: saml-cert-tls-1
+
+      - CERT_NAMESPACE: monitoring
+        CERT_NAME: saml-cert-2
+        CERT_SECRET_NAME: saml-cert-tls-2
+
+      - CERT_NAMESPACE: monitoring
+        CERT_NAME: saml-cert-3
+        CERT_SECRET_NAME: saml-cert-tls-3
+
+    AWS_REGION: ap-southeast-1
+    EVENT_BUS_NAME: lambda-event
+    EVENT_SOURCE: saml-cert
+    EVENT_DETAIL_TYPE: CertificateChanged
+    RESTART_DEPLOYMENT_NAME: onelogin
+    RESTART_DEPLOYMENT_NAMESPACE: onelogin
+
+
+serviceAccount:
+  namespace: monitoring
+  name: certificate-event-publisher
+  annotations:
+    eksRoleArn: <ARN to push Event to eventbridge>
+
+rbac:
+  secret:
+    namespace: monitoring
+    role:
+      name: certificate-secret-reader
+
+    roleBinding:
+      name: certificate-secret-reader
+
+  restart:
+    namespace: onelogin
+    role:
+      name: certificate-deployment-patcher
+
+    roleBinding:
+      name: certificate-deployment-patcher
