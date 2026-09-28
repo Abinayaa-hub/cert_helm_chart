@@ -4,7 +4,7 @@ deployment:
 
   image:
     repository: arti-strata.freewheel.tv/fwa-docker/onestrata/certwatcher-python
-    tag: "20260917"
+    tag: "20260924"
     pullPolicy: IfNotPresent
 
   serviceAccount:
